@@ -1,0 +1,1 @@
+<?php $homePage = $_SERVER["DOCUMENT_ROOT"].'/learnPHP';?>
