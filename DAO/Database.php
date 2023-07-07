@@ -1,19 +1,27 @@
 <?php
-$db_name = "test";
-$user = "root";
-$pass = "2002";
-$db_server = "localhost";
-$conn = null;
-try{
-    $conn = mysqli_connect($db_server, $user, $pass, $db_name);
-    // if($conn){
-    //     echo "connected";
-    // }
-    // else{
-    //     echo "connect fall";
-    // }
-}
-catch(mysqli_sql_exception $e){
-    echo $e;
+class Conn{
+    private $db_name = "learn_php";
+    private $user = "root";
+    private $pass = "2002";
+    private $db_server = "localhost";
+    private $conn = null;
+    public function __construct(){
+
+    }
+    public function connect(){
+        try{
+            $conn = mysqli_connect($this->db_server, $this->user, $this->pass, $this->db_name);
+            // if($conn){
+            //     echo "connected";
+            // }
+            // else{
+            //     echo "connect fall";
+            // }
+        }
+        catch(mysqli_sql_exception $e){
+            echo $e;
+        }
+        return $conn;
+    }
 }
 ?>
