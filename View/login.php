@@ -1,84 +1,56 @@
-<?php 
-session_start(); 
-if(!isset($_SESSION["username_error"])) $_SESSION["username_error"] = 0;
-if(!isset($_SESSION["password_error"])) $_SESSION["password_error"] = 0;
-if(!isset($_SESSION["username"])) $_SESSION["username"]="";
-if(!isset($_SESSION["password"])) $_SESSION["password"]="";
-// echo $_SESSION["username_error"].'<br>'.$_SESSION["password_error"];
-?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập FakeBook</title>
-    <link rel="icon" href="../Data/Photo/icon.ico">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" href="./Data/Photo/icon.ico">
+    <link rel="stylesheet" href="./View/css/login.css">
 </head>
 <body>
     <div class="content">
         <div class="logo_content">
             <div class="logo">FAKEBOOK</div>
             <div class="text_under_logo">
-                <p>Facebook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.</p>
+                <p>Fakebook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.</p>
             </div>
         </div>
         <div class="login_content">
             <div class="login_form">
-                <form action="login.php" id="login_form" method="post">
-                    <input type="text" placeholder="Tài khoản" name="username" value="<?= $_SESSION["username"] ?>">
+                <form id="login_form" method="post" action="" onsubmit="submitFormLogin(e)">
+                    <input class="inp" type="text" placeholder="Tài khoản" name="username" value="<?=$username?>">
                     <?php
-                    if(trim($_SESSION["username"])==""){
-                        echo "Hãy nhập tài khoản<br>";
-                    }
-                    elseif($_SESSION["username_error"]==1){
-                        echo "Tài khoản không tồn tại<br>";
-                    }
+                    echo "<p style = 'text-align: center;margin:0'>{$mess1}</p>";
                     ?>
-                    <input type="password" placeholder="Mật khẩu" name="password">
+                    <input class="inp" type="password" placeholder="Mật khẩu" name="password" value="<?=$password?>">
                     <?php
-                    if(trim($_SESSION["password"])=="" && $_SESSION["username_error"]==0){
-                        echo "Hãy nhập mật khẩu<br>";
-                    }
-                    elseif($_SESSION["password_error"]==1){
-                        echo "Mật khẩu sai<br>";
-                    }
+                    echo "<p style = 'text-align: center;margin:0'>{$mess2}</p>"
                     ?>
-                    <input type="submit" value="Đăng nhập" style="background-color: #1877f2;border: none;color: white" name="login">
-                    <a class="quenmatkhau" href="quen_mat_khau.php">Quên mật khẩu?</a>
+                    <input type="submit" value="Đăng nhập" style="background-color: #1877f2;border: none;color: white" class="bt_login" name="login">
+                    <?php
+                    echo "<p style = 'text-align: center;margin:0'>{$mess0}</p>";
+                    ?>
+                    <a class="quenmatkhau" href="Login/quen-mat-khau">Quên mật khẩu?</a>
                 </form>
             </div>
-            <button class="bt_register">Tạo tài khoản mới</button>
+            <button class="bt_register_bt1">Tạo tài khoản mới</button>
+        </div>
+    </div>
+    <div class="content_register">
+        <div class="background_register"></div>
+        <div class="form_register">
+            <button class="bt_close" >X</button>
+            <h2 style="text-align: center; color: white">Đăng ký</h2>
+            <form class="register_form" action="" method="post" onsubmit="submitFormRegister(event)">
+                <input type="text" placeholder="Tài khoản" name="username" class="username_input">
+                <input type="password" placeholder="Mật khẩu" name="password" class="password_input">
+                <input type="password" placeholder="Nhập lại mật khẩu" name="repassword" class="repassword_input">
+                <br>
+                <input type="submit" value="Đăng ký" name="register" class="bt_register_bt2">
+            </form>
+            <p class="mess" style="text-align: center; margin-top:5px"></p>
         </div>
     </div>
 </body>
+<script src="./View/js/login.js"></script>
 </html>
-<?php
-// include("../Model/Encrypt.php");
-// $encrypt = new Encrypt;
-// echo base64_encode($encrypt->encrypt(""));
-// $iv = random_bytes(16);
-// echo base64_encode($iv);
-include("../Controller/LoginController.php");
-if(isset($_POST["login"])){
-    $_SESSION["username"] = $_POST["username"];
-    $_SESSION["password"] = $_POST["password"];
-    $check = login($_POST["username"], $_POST["password"]);
-    if($check==1){
-        $_SESSION["account"] = base64_encode($_POST["username"]);
-        header("location: Home.php");
-    }
-    elseif ($check==0) {
-        $_SESSION["username_error"]=1;
-        $_SESSION["password_error"]=0;
-        header("Refresh:0");
-        exit();
-    }
-    else{
-        $_SESSION["username_error"]=0;
-        $_SESSION["password_error"]=1;
-        header("Refresh:0");
-        exit();
-    }
-}
-?>

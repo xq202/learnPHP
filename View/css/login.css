@@ -24,6 +24,10 @@
     padding-left: 10px;
     font-size: 15px;
 }
+#login_form input:focus{
+    border-color: #1877f2;
+    outline: none;
+}
 .quenmatkhau{
     padding-left: 100px; 
     margin-bottom: 20px;
@@ -38,12 +42,13 @@
     /* background-color: aqua; */
 }
 .login_content{
-    border: 1px solid;
+    border: 2px solid rgb(199, 195, 195);
+    border-radius: 10px;
     width: 340px;
-    margin-top: 140px;
+    margin-top: 100px;
     margin-right: 50px;
 }
-.bt_register{
+.bt_register_bt1{
     height: 40px;
     border-radius: 5px;
     border: 0;
@@ -52,8 +57,87 @@
     margin: 15px 0 15px 110px;
 }
 .logo_content{
-    margin-top: 240px;
+    margin-top: 200px;
     min-width: 300px;
     padding-right: 40px;
     margin-left: 40px;
+}
+.logo{
+    font-size: 30px;
+    color: #1877f2;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.background_register{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(23, 26, 29);
+    position: absolute;
+    /* top: 0; */
+    opacity: 0.9;
+}
+.form_register{
+    border-radius: 10px;
+    border: 1px;
+    width: 360px;
+    height: 300px;
+    background-color: #1877f2;
+    left: calc(50% - 180px);
+    right: 150px;
+    top: 100px;
+    /* bottom: auto; */
+    position: absolute;
+    text-align: center;
+    /* display: flex;
+    flex-direction: column; */
+}
+.form_register form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 60%;
+    margin-left: 10%;
+    width: 300px;
+    text-align: center;
+}
+.form_register form input + input {
+    margin-top: 10px;
+}
+.form_register form input{
+    height: 25px;
+    padding-left: 10px;
+    margin-right: 5px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+}
+.content_register{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+}
+.bt_close{
+    background: none;
+    border: none;
+    display: block;
+    float: right;
+    border: 1px;
+}
+.bt_register_bt2{
+    height: 40px;
+    border-radius: 5px;
+    border: 0;
+    background-color: #42b72a;
+    color: white;
+    margin: 15px 0 15px 0;
+}
+@keyframes DamDan{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
 }

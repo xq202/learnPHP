@@ -1,6 +1,9 @@
 <?php
+
+// use Exception;
+
 class Conn{
-    private $db_name = "learn_php";
+    private $db_name = "test";
     private $user = "root";
     private $pass = "2002";
     private $db_server = "localhost";
