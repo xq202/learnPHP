@@ -17,7 +17,7 @@
         </div>
         <div class="login_content">
             <div class="login_form">
-                <form id="login_form" method="post" action="" onsubmit="submitFormLogin(e)">
+                <form id="login_form" method="post" action="">
                     <input class="inp" type="text" placeholder="Tài khoản" name="username" value="<?=$username?>">
                     <?php
                     echo "<p style = 'text-align: center;margin:0'>{$mess1}</p>";

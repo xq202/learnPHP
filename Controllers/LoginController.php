@@ -6,7 +6,6 @@ class LoginController{
     }
     public function Login(){
         require "./Model/LoginModel.php";
-        if(!isset($_SESSION["login"])) $_SESSION["login"] = 0;
         $loginModel = new LoginModel();
         $mess = $loginModel->checkLogin();
         $mess0 = "";
@@ -20,9 +19,8 @@ class LoginController{
             header("location: Home");
             exit();
         }
-        if($_SESSION["login"]==0){
+        if(!isset($_POST["username"])){
             require "./View/login.php";
-            $_SESSION["login"]+=1;
             exit();
         }
         $loginReturn = $loginModel->login();

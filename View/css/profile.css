@@ -1,0 +1,66 @@
+div{
+    border: 1px solid black;
+}
+.phan1{
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin-left: 15%;
+}
+.anh-bia{
+    width: 100%;
+    border: 1px solid black;
+    height: 400px;
+}
+.anh-bia img{
+    /* border: 1px; */
+}
+.anh-dai-dien{
+    border: 1px solid black;
+    border-radius: 180px;
+    width: 180px;
+    height: 180px;
+}
+.thong-tin-co-ban{
+    display: flex;
+}
+.ben-phai-anh-dai-dien{
+    display: flex;
+    flex: 1;
+}
+.ten-va-so-ban-be{
+    flex: 2;
+    padding-left: 10px;
+}
+.tuy-chon{
+    flex: 3;
+}
+.tuy-chon button{
+    float: right;
+    margin-top: 150px;
+    height: 30px;
+    width: 80px;
+}
+.tuy-chon button + button{
+    margin-right: 10px;
+}
+.menu-trang-ca-nhan ul{
+    display: flex;
+    justify-content: space-around;
+    overflow: none;
+    list-style-type: none;
+    padding-left: 0;
+}
+.menu-trang-ca-nhan li{
+    text-decoration: none;
+    display: block;
+    background-color: aqua;
+    height: 30px;
+    width: 80px;
+    text-align: center;
+    padding-top: 10px;
+    border-radius: 5px;
+    color: aliceblue;
+}

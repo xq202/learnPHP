@@ -29,10 +29,6 @@ loginForm.addEventListener("submit",function(e){
     bt_login.disabled = false;
   },2000)
 })
-function submitFromLogin(e){
-  e.preventDefault();
-  alert("click");
-}
 function submitFormRegister(event) {
   event.preventDefault();
   
