@@ -95,7 +95,7 @@ class LoginModel{
             $pass_save = $encrypt->encrypt($password);
             $stmt->prepare("insert into account (username, password) values (?, ?)");
             $stmt->bind_param("ss",$username,$pass_save);
-            // $stmt->execute();
+            $stmt->execute();
             $stmt->close();
             return 1;
         }

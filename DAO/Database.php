@@ -5,7 +5,7 @@
 class Conn{
     private $db_name = "test";
     private $user = "root";
-    private $pass = "2002";
+    private $pass = null;
     private $db_server = "localhost";
     private $conn = null;
     public function __construct(){
