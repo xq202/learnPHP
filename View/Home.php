@@ -1,5 +1,5 @@
 <?php
-echo base64_decode($_SESSION["account"]);
+echo base64_decode($_SESSION["id"]);
 ?>
 <form action="" method="post">
     <input type="submit" value="logout" name="logout">

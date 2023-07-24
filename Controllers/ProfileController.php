@@ -4,13 +4,28 @@ class ProfileController{
     {
         
     }
-    public function ProfileView(){
-        $nameUser = "test";
+    public function ProfileView($page){
+        require "./Model/UserModel.php";
+        $userModel = new UserModel();
+        $id = 1;
         if(!isset($_GET["id"])){
-            $_GET["id"] = $_SESSION["id"];
+            $id = base64_decode($_SESSION["id"]);
         }
+        else{
+            $id = $_GET["id"];
+        }
+        $user = $userModel->getUserById($id);
+        $name = $user->getTen();
+        $srcCoverPhoto = $user->getAnhBia();
+        $srcAvatarPhoto = $user->getAnhDaiDien();
         require "./View/profile.php";
     }
 }
 $profileController = new ProfileController();
-$profileController->ProfileView();
+if($action == "gioithieu"){
+    $profileController->ProfileView("./View/gioi-thieu.php");
+}
+else{
+    $profileController->ProfileView("./View/bai-viet.php");
+}
+?>

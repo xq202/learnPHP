@@ -16,7 +16,7 @@ class LoginController{
         else $username = $_POST["username"];
         if(isset($_SESSION["logged"])){
             sleep(2);
-            header("location: Home");
+            header("location: /learnPHP/Home");
             exit();
         }
         if(!isset($_POST["username"])){
@@ -25,12 +25,12 @@ class LoginController{
         }
         $loginReturn = $loginModel->login();
         if($mess==1){
-            if($loginReturn==1){
+            if($loginReturn[0]==1){
                 $mess0 = "Đăng nhập thành công!";
                 $password = $_POST["password"];
                 require "./View/login.php";
                 $_SESSION["logged"] = 1;
-                $_SESSION["account"] = base64_encode($username);
+                $_SESSION["id"] = base64_encode(substr($loginReturn,2));
                 header("refresh:0");
                 exit();
             }
@@ -69,7 +69,7 @@ class LoginController{
             }
             else
             echo "1:Đăng ký thành công!";
-            $_SESSION["account"] = base64_encode($_POST["username"]);
+            $_SESSION["id"] = base64_encode($res);
             $_SESSION["logged"] = 1;
             exit();
         }
@@ -79,10 +79,11 @@ class LoginController{
     }
 }
 $view = new LoginController();
+// echo $action;
 if($action == "quen-mat-khau"){
     $view->QuenMatKhau();
 }
-elseif($action=="RegisterAPI"){
+elseif($action=="registerapi"){
     $view->RegisterAPI();
 }
 else{

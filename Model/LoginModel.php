@@ -32,7 +32,7 @@ class LoginModel{
         $conn = new Conn();
         $conn = $conn->connect();
         $stmt = $conn->stmt_init();
-        $stmt->prepare("select username, password from account where username = ?");
+        $stmt->prepare("select * from account where username = ?");
         $stmt->bind_param("s",$username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -41,8 +41,14 @@ class LoginModel{
             $encrypt = new Encrypt();
             $pass = $encrypt->encrypt($password);
             // echo $pass.'<br>'.$row["password"];
-            if($pass===$row["password"])
-            return 1;
+            if($pass===$row["password"]){
+                $id = null;
+                $stmt->prepare("select id from user where id_acc = ?");
+                $stmt->bind_param("s",$row['id']);
+                $stmt->execute();
+                $id = $stmt->get_result()->fetch_assoc()['id'];
+                return "1:{$id}";
+            }
             else return 2;
         }
         else{
@@ -96,8 +102,13 @@ class LoginModel{
             $stmt->prepare("insert into account (username, password) values (?, ?)");
             $stmt->bind_param("ss",$username,$pass_save);
             $stmt->execute();
+            $id = $stmt->insert_id;
+            $stmt->prepare("insert into user (id_acc) values (?)");
+            $stmt->bind_param("s",$id);
+            $stmt->execute();
+            $id = $stmt->insert_id;
             $stmt->close();
-            return 1;
+            return $id;
         }
     }
 }

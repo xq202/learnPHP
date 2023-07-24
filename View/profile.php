@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=$nameUser ?> | Fakebook</title>
+    <title><?=$name?> | Fakebook</title>
     <link rel="icon" href="./Data/Photo/icon.ico">
     <link rel="stylesheet" href="./View/css/profile.css">
 </head>
 <body>
-    <div class="background">
+    <div class="background1">
         <div class="phan1">
-            <div class="anh-bia"><img src="./Data/Photo/cover_photo/no-cover-photo.jpg" alt="anh bia"></div>
+            <div class="anh-bia"><a href=""><img src="<?=$srcCoverPhoto?>" alt="anh bia"></a></div>
             <div class="thong-tin-co-ban">
-                <div class="anh-dai-dien"><img src="./Data/Photo/avatar/avatar-mac-dinh.jpg" alt="anh dai dien"></div>
+                <div class="anh-dai-dien"><a href=""><img src="<?=$srcAvatarPhoto?>" alt="anh dai dien"></a></div>
                 <div class="ben-phai-anh-dai-dien">
                     <div class="ten-va-so-ban-be">
-                        <h1>name</h1>
-                        <p>x ban be</p>
-                        <p>x ban chung</p>
+                        <span style="font-size: 30px; font-weight: bold;"><?=$name ?></span><br>
+                        <span>x ban be</span><br>
+                        <span>x ban chung</span>
                     </div>
                     <div class="tuy-chon">
                         <button class="bt-tuy-chon">ban be</button>
@@ -36,8 +36,12 @@
                 </div>
         </div>
     </div>
-    <div class="phan2">
-        
+    <div class="background2">
+        <div class="phan2">
+            <?php
+            include $page;
+            ?>
+        </div>
     </div>
 </body>
 </html>

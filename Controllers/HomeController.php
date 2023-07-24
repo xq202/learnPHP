@@ -9,7 +9,7 @@ class HomeController{
     }
 }
 $homeController = new HomeController();
-if(!isset($_SESSION["account"])){
+if(!isset($_SESSION["id"])){
     header("location: Login");
     exit();
 }
