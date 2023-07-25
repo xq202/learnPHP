@@ -16,13 +16,14 @@ class ProfileController{
         }
         $user = $userModel->getUserById($id);
         $name = $user->getTen();
+        if($name==null) $name = "noname";
         $srcCoverPhoto = $user->getAnhBia();
         $srcAvatarPhoto = $user->getAnhDaiDien();
         require "./View/profile.php";
     }
 }
 $profileController = new ProfileController();
-if($action == "gioithieu"){
+if($action == "gioi-thieu"){
     $profileController->ProfileView("./View/gioi-thieu.php");
 }
 else{

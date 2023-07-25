@@ -51,10 +51,11 @@ function submitFormRegister(event) {
       // alert(req.responseText);
       arr = req.responseText.split(":");
       document.querySelector(".mess").innerText = arr[1];
-      if(arr[0]=='1')
-      setTimeout(function(){
-        window.location.href = "Home";
-      },2000)
+      if(arr[0]=='1'){
+        setTimeout(function(){
+          window.location.href = "/learnPHP/Home";
+        },2000);
+      }
     } else {
       alert(req.onerror());
     }

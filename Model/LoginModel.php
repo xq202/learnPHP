@@ -49,10 +49,10 @@ class LoginModel{
                 $id = $stmt->get_result()->fetch_assoc()['id'];
                 return "1:{$id}";
             }
-            else return 2;
+            else return '2';
         }
         else{
-            return 0;
+            return '0';
         }
         $conn->close();
     }

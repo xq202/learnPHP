@@ -87,6 +87,7 @@ elseif($action=="registerapi"){
     $view->RegisterAPI();
 }
 else{
+    echo "<base href=\"/learnPHP/\">";
     $view->Login();
 }
 ?>

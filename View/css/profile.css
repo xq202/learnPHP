@@ -1,6 +1,9 @@
 div{
     /* border: 1px solid black; */
 }
+body{
+
+}
 .phan1{
     box-sizing: border-box;
     display: flex;
@@ -8,7 +11,7 @@ div{
     width: 70%;
     margin-left: auto;
     margin-right: auto;
-    min-width: 530px;
+    min-width: 820px;
 }
 .background1{
     min-width: 500px;
@@ -52,9 +55,12 @@ div{
 }
 .tuy-chon{
     flex: 3;
+    display: flex;
+    justify-content: right;
+    flex-wrap: nowrap;
 }
 .tuy-chon button{
-    float: right;
+    /* float: right; */
     margin-top: 150px;
     height: 35px;
     width: 80px;
@@ -101,4 +107,6 @@ div{
 .background2{
     background-color: rgb(238, 238, 235);
     padding-bottom: 10px;
+    padding: auto;
+    min-width: 820px;
 }
