@@ -6,6 +6,9 @@
     <title><?=$name?> | Fakebook</title>
     <link rel="icon" href="./Data/Photo/icon.ico">
     <link rel="stylesheet" href="./View/css/profile.css">
+    <script>
+        var id = <?=$id?>;
+    </script>
 </head>
 <body>
     <div class="background1">
@@ -44,4 +47,5 @@
         </div>
     </div>
 </body>
+<script src="./View/js/profile.js"></script>
 </html>

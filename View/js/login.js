@@ -44,12 +44,12 @@ function submitFormRegister(event) {
   formData.append("password", pass);
   formData.append("repassword", repass);
   
-  req.open("POST", "Login/RegisterAPI", true);
+  req.open("POST", "Api/RegisterAPI", true);
   
   req.onload = function() {
     if (req.status == 200) {
       // alert(req.responseText);
-      arr = req.responseText.split(":");
+      var arr = req.responseText.split(":");
       document.querySelector(".mess").innerText = arr[1];
       if(arr[0]=='1'){
         setTimeout(function(){

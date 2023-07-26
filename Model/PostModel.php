@@ -1,8 +1,11 @@
 <?php
+namespace Model;
+// require "./DAO/Database.php";
+use DAO\ConnDAO;
+
 class PostModel{
     public function getPostById($id){
-        include "./DAO/Database.php";
-        $conn = new Conn();
+        $conn = new ConnDAO();
         $conn = $conn->connect();
         $stmt = $conn->stmt_init();
         $stmt->prepare("select * from post where id = ?");
@@ -16,11 +19,31 @@ class PostModel{
             return $post;
         }
     }
+    public function getListIdPostByIdAcc($id){
+        $conn = new ConnDAO();
+        $sql = "select * from post_of_user where id_acc = ?";
+        $conn = $conn->connect();
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($sql);
+        $stmt->bind_param("s",$id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $listIdPost = array();
+        if($result){
+            while($row = $result->fetch_assoc()){
+                $listIdPost[] = $row["id_post"];
+            }
+        }
+        else{
+            echo $stmt->error;
+        }
+        return $listIdPost;
+    }
 }
 class Post{
     private $text;
     public function getText(){
-        return $this->getText();
+        return $this->text;
     }
     public function setText($text){
         $this->text = $text;

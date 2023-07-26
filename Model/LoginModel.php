@@ -1,6 +1,9 @@
 <?php
-require "./DAO/Database.php";
-require "./Model/Encrypt.php";
+namespace Model;
+// require "./DAO/Database.php";
+// require "./Model/Encrypt.php";
+use DAO\Conn;
+use Model\Encrypt;
 class LoginModel{
     private $username = "";
     private $password = "";

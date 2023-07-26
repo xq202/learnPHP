@@ -1,4 +1,5 @@
 <?php
+namespace Model;
 class Encrypt{
     public function __construct(){
 

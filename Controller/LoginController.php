@@ -1,11 +1,13 @@
 <?php
+namespace Controller;
+use Model\LoginModel;
 class LoginController{
     public function __construct()
     {
         
     }
     public function Login(){
-        require "./Model/LoginModel.php";
+        // require "./Model/LoginModel.php";
         $loginModel = new LoginModel();
         $mess = $loginModel->checkLogin();
         $mess0 = "";
@@ -56,35 +58,11 @@ class LoginController{
     public function QuenMatKhau(){
         require "./View/quen_mat_khau.php";
     }
-    public function RegisterAPI(){
-        require "./Model/LoginModel.php";
-        $register = new LoginModel();
-        $result = $register->checkRegister();
-        // echo "run";
-        if($result==1){
-            $res = $register->register();
-            if($res==0){
-                echo "0:Tài khoản đã tồn tại";
-                exit();
-            }
-            else
-            echo "1:Đăng ký thành công!";
-            $_SESSION["id"] = base64_encode($res);
-            $_SESSION["logged"] = 1;
-            exit();
-        }
-        else{
-            echo '0:'.$result;
-        }
-    }
 }
 $view = new LoginController();
 // echo $action;
 if($action == "quen-mat-khau"){
     $view->QuenMatKhau();
-}
-elseif($action=="registerapi"){
-    $view->RegisterAPI();
 }
 else{
     echo "<base href=\"/learnPHP/\">";

@@ -1,13 +1,15 @@
 <?php
+namespace Controller;
+use Model\UserModel;
 class ProfileController{
     public function __construct()
     {
         
     }
     public function ProfileView($page){
-        require "./Model/UserModel.php";
+        // require "./Model/UserModel.php";
         $userModel = new UserModel();
-        $id = 1;
+        $id = null;
         if(!isset($_GET["id"])){
             $id = base64_decode($_SESSION["id"]);
         }

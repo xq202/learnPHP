@@ -1,5 +1,7 @@
 <?php
-include "./DAO/Database.php";
+namespace Model;
+// require "./DAO/Database.php";
+use DAO\ConnDAO;
 class User{
     public function __construct($ten, $gioiTinh, $ngaySinh, $queQuan, $noiOHienTai, $soThich, $gioiThieu, $anhDaiDien, $anhBia)
     {
@@ -21,7 +23,6 @@ class User{
         else
         $this->anhBia = $anhBia;
     }
-    private $idAcc;
     private $ten;
     private $gioiTinh;
     private $ngaySinh;
@@ -88,7 +89,7 @@ class User{
 }
 class UserModel{
     public function getUserById($id){
-        $conn = new Conn();
+        $conn = new ConnDAO();
         $conn = $conn->connect();
         $stmt = $conn->stmt_init();
         $sql = "select * from user where id = ?";

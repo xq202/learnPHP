@@ -1,8 +1,11 @@
 <?php
 
 // use Exception;
+namespace DAO;
 
-class Conn{
+use Exception;
+
+class ConnDAO{
     private $db_name = "test";
     private $user = "root";
     private $pass = null;
@@ -21,7 +24,7 @@ class Conn{
             //     echo "connect fall";
             // }
         }
-        catch(mysqli_sql_exception $e){
+        catch(Exception $e){
             echo $e;
         }
         return $conn;
