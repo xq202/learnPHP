@@ -29,19 +29,14 @@ class ApiController{
     }
     public function PostAPI(){
         $userModel = new UserModel();
-        $id = null;
-        if(!isset($_GET["id"])){
-            $id = base64_decode($_SESSION["id"]);
-        }
-        else{
-            $id = $_GET["id"];
-        }
+        $id = $_GET["id"];
+        $index = $_GET["index"];
         $user = $userModel->getUserById($id);
         $name = $user->getTen();
         if($name==null) $name = "noname";
         $srcAvatarPhoto = $user->getAnhDaiDien();
         $postModel = new PostModel();
-        $listIdPost = $postModel->getListIdPostByIdAcc($id);
+        $listIdPost = $postModel->getListIdPostByIdAcc($id, $index);
         $listPost = array();
         foreach($listIdPost as $idPost){
             $listPost[] = $postModel->getPostById($idPost);

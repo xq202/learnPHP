@@ -7,4 +7,7 @@
         <input type="submit" value="Bạn đang nghĩ gì?" readonly>
     </div>
 </div>
+<div class="new_post">
+    <p>bai viet moi hon</p>
+</div>
 <div class="listPost"></div>

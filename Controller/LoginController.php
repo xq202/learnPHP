@@ -4,7 +4,7 @@ use Model\LoginModel;
 class LoginController{
     public function __construct()
     {
-        
+        echo "<base href=\"/learnPHP/\">";
     }
     public function Login(){
         // require "./Model/LoginModel.php";
@@ -65,7 +65,6 @@ if($action == "quen-mat-khau"){
     $view->QuenMatKhau();
 }
 else{
-    echo "<base href=\"/learnPHP/\">";
     $view->Login();
 }
 ?>

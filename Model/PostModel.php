@@ -19,9 +19,9 @@ class PostModel{
             return $post;
         }
     }
-    public function getListIdPostByIdAcc($id){
+    public function getListIdPostByIdAcc($id, $index){
         $conn = new ConnDAO();
-        $sql = "select * from post_of_user where id_acc = ?";
+        $sql = "select * from post_of_user where id_acc = ? limit {$index}, 20";
         $conn = $conn->connect();
         $stmt = $conn->stmt_init();
         $stmt->prepare($sql);

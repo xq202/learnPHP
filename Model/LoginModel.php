@@ -3,6 +3,7 @@ namespace Model;
 // require "./DAO/Database.php";
 // require "./Model/Encrypt.php";
 use DAO\Conn;
+use DAO\ConnDAO;
 use Model\Encrypt;
 class LoginModel{
     private $username = "";
@@ -32,7 +33,7 @@ class LoginModel{
     public function login(){
         $username = $this->username;
         $password = $this->password;
-        $conn = new Conn();
+        $conn = new ConnDAO();
         $conn = $conn->connect();
         $stmt = $conn->stmt_init();
         $stmt->prepare("select * from account where username = ?");

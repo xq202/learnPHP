@@ -4,7 +4,7 @@ use Model\UserModel;
 class ProfileController{
     public function __construct()
     {
-        
+        echo "<base href=\"/learnPHP/\">";
     }
     public function ProfileView($page){
         // require "./Model/UserModel.php";
@@ -16,6 +16,8 @@ class ProfileController{
         else{
             $id = $_GET["id"];
         }
+        $url = $_SERVER["REQUEST_URI"];
+        // echo $url;
         $user = $userModel->getUserById($id);
         $name = $user->getTen();
         if($name==null) $name = "noname";
@@ -25,10 +27,21 @@ class ProfileController{
     }
 }
 $profileController = new ProfileController();
-if($action == "gioi-thieu"){
-    $profileController->ProfileView("./View/gioi-thieu.php");
-}
-else{
-    $profileController->ProfileView("./View/bai-viet.php");
+switch($action){
+    case "gioi-thieu":
+        $profileController->ProfileView("./View/gioi-thieu.php");
+        break;
+    case "ban-be":
+        $profileController->ProfileView("./View/ban-be.php");
+        break;
+    case "anh":
+        $profileController->ProfileView("./View/video.php");
+        break;
+    case "video":
+        $profileController->ProfileView("./View/video.php");
+        break;
+    default:
+        $profileController->ProfileView("./View/bai-viet.php");
+        break;
 }
 ?>

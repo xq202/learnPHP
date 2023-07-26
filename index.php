@@ -10,18 +10,19 @@ $urls = explode("/", $str);
 $controller = (isset($urls[0])) ? $urls[0] : "";
 $controller = ucfirst(strtolower($controller));
 $action = (isset($urls[1])) ? strtolower($urls[1]) : "";
-// echo "<base href=\"{$baseURL}\">";
-$autoloadPath = __DIR__ . '/';
+$autoloadPath = __DIR__ . '\\';
 spl_autoload_register(function ($class) use ($autoloadPath) {
     // Chuyển tên class thành đường dẫn đến file
-    $file = $autoloadPath.substr($class,strlen($class),0).str_replace('\\', '/', $class) . '.php';
+    $file = $autoloadPath.$class.'.php';
 
     // Kiểm tra xem file có tồn tại không và require nếu có
     if (file_exists($file)) {
+        // echo $file.'<br>';
         require $file;
     }
     else{
         echo $file;
     }
 });
+// print_r($_SERVER);
 require './Controller/'.$controller.'Controller.php';

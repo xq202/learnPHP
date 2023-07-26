@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./View/css/profile.css">
     <script>
         var id = <?=$id?>;
+        var index = 0;
+        var url = '<?=$url?>';
     </script>
 </head>
 <body>
@@ -30,11 +32,11 @@
             </div>
             <div class="menu-trang-ca-nhan">
                     <ul>
-                        <li>bai viet</li>
-                        <li>gioi thieu</li>
-                        <li>ban be</li>
-                        <li>anh</li>
-                        <li>video</li>
+                        <li class="lua_chon">bai viet</li>
+                        <li class="lua_chon">gioi thieu</li>
+                        <li class="lua_chon">ban be</li>
+                        <li class="lua_chon">anh</li>
+                        <li class="lua_chon">video</li>
                     </ul>
                 </div>
         </div>
