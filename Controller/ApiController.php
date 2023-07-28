@@ -3,6 +3,8 @@ namespace Controller;
 // require "./Model/LoginModel.php";
 // require "./Model/PostModel.php";
 // require "./Model/UserModel.php";
+
+use DateTime;
 use Model\LoginModel;
 use Model\UserModel;
 use Model\PostModel;
@@ -28,6 +30,7 @@ class ApiController{
         }
     }
     public function PostAPI(){
+        //user
         $userModel = new UserModel();
         $id = $_GET["id"];
         $index = $_GET["index"];
@@ -35,17 +38,51 @@ class ApiController{
         $name = $user->getTen();
         if($name==null) $name = "noname";
         $srcAvatarPhoto = $user->getAnhDaiDien();
+        //post
         $postModel = new PostModel();
         $listIdPost = $postModel->getListIdPostByIdAcc($id, $index);
         $listPost = array();
         foreach($listIdPost as $idPost){
             $listPost[] = $postModel->getPostById($idPost);
         }
-        $media = "";
-        $media .= '<video src="./Data/Video/Facebook.mp4" controls></video><br>';
-        $media .= '<img class="media"src="./Data/Photo/Avatar/avatar-admin.jpg"><br>';
         $listPostHtml = [];
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
+        $currentTime = new DateTime('now');
+        
         foreach($listPost as $post){
+            $targetTime = new DateTime($post['create_time']);
+            $time = $currentTime->diff($targetTime);
+            $listTime = [$time->days.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
+            $passed = null;
+            if($time->days>7){
+                $passed = $targetTime->format('d').' thang '.$targetTime->format('m').', '.$targetTime->format('Y');
+            }
+            else
+            foreach($listTime as $t){
+                if($t[0]!=0){
+                    $passed = $t;
+                    break;
+                }
+            }
+
+            $listIdMedia = $postModel->getListIdMediaByIdPost($post['id']);
+            $listMedia = [];
+            foreach($listIdMedia as $id){
+                $listMedia[] = $postModel->getMediaById($id);
+            }
+            $media = "";
+            foreach($listMedia as $m){
+                if($m['type']=="video"){
+                    $media .= '<video class="media" src="'.$m['src'].'" controls></video><br>';
+                }
+                else{
+                    $media .= '<img class="media"src="'.$m['src'].'"><br>';
+                }
+            }
+
+            $countLike = $postModel->getCountLikeByIdPost($post['id']);
+            $countComment = $postModel->getCountCommentByIdPost($post['id']);
+
             $listPostHtml[] = 
             '
             <div class="post">
@@ -55,17 +92,21 @@ class ApiController{
                     </div>
                     <div class="name_and_date">
                     <span style="font-size: 15px; font-weight: bold;">'.$name.'</span><br>
-                    <span>1 ngay</span>
+                    <span>'.$passed.'</span>
                     </div>
                 </div>
                 <div class="post_content">
                     <div class="text">
-                        <p>'.$post->getText().'
+                        <p>'.$post['text'].'
                     </div>
                     <div class="list_media">
                         '.$media.'
-                        <img class="media"src="./Data/Photo/Avatar/avatar-admin.jpg"><br>
                     </div>
+                </div>
+                <div class="info_of_post">
+                    <span class="like">'.$countLike.' like</span>
+                    <span class="comment">'.$countComment.' binh luan</span>
+                    <span class="share"><?=$share?>chia se</span>
                 </div>
                 <div class="action_with_post">
                     <button>like</button><button>binh luan</button><button>chia se</button>

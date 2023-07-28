@@ -1,3 +1,4 @@
+<base href="/learnPHP/">
 <link rel="stylesheet" href="./View/css/bai-viet.css">
 <div class="addPost">
     <div class="small_avatar">
