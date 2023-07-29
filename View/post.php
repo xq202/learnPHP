@@ -1,5 +1,5 @@
 <base href="/learnPHP/">
-<link rel="stylesheet" href="./View/css/bai-viet.css">
+<link rel="stylesheet" href="./View/css/post.css">
 <div class="addPost">
     <div class="small_avatar">
         <a href=""><img src="<?=$srcAvatarPhoto?>" alt=""></a>

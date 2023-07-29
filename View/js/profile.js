@@ -7,12 +7,85 @@ function loadpost(){
     http.open("GET",`Api/PostAPI?id=${id}&index=${index}`,true);
     http.onload = function(){
         if(http.status === 200){
-            // alert('load');
+            // alert(idUser);
             var listData = JSON.parse(http.responseText);
             x = listData.length;
-            listData.forEach(element => {
-                listPost.innerHTML += element;
-            });
+            var listIdPost = []
+            listData.forEach(dataPost =>{
+                let liked = '';
+                // alert(dataPost.checkLike);
+                if(dataPost.checkLike==1){
+                    liked = 'style="background-color: aqua"';
+                }
+                listPost.innerHTML += 
+                `<div class="post">
+                    <div class="user_of_post">
+                        <div class="small_avatar">
+                            <a href=""><img src="${dataPost.srcAvatarPhoto}" alt=""></a>
+                        </div>
+                        <div class="name_and_date">
+                        <span style="font-size: 15px; font-weight: bold;">${dataPost.userName}</span><br>
+                        <span>${dataPost.passed}</span>
+                        </div>
+                    </div>
+                    <div class="post_content">
+                        <div class="text">
+                            <p>${dataPost.text}</p>
+                        </div>
+                        <div class="list_media">
+                            ${dataPost.media}
+                        </div>
+                    </div>
+                    <div class="info_of_post">
+                        <span><span class="countLike_${dataPost.idPost}">${dataPost.countLike}</span> like</span>
+                        <span class="comment">${dataPost.countComment} binh luan</span>
+                        <span class="share">${dataPost.countShare} chia se</span>
+                    </div>
+                    <div class="action_with_post">
+                        <button class="action_bt" ${liked}>like</button><button class="action_bt">binh luan</button><button class="action_bt">chia se</button>
+                    </div>
+                </div>
+                `;
+            listIdPost.push(dataPost.idPost);
+            })
+        }
+        var bt = document.querySelectorAll(".action_bt");
+        for(let i=0;i<bt.length;i++){
+            bt[i].onclick = function(){
+                if(idUser==""){
+                    alert('vui long dang nhap');
+                    window.location.href = '/learnPHP/Login';
+                    return;
+                }
+            }
+            if(i%3==0){
+                bt[i].addEventListener('click',function(){
+                    // alert('click');
+                    var http1 = new XMLHttpRequest();
+                    http1.open('GET',`Api/likeapi?idUser=${idUser}&idPost=${listIdPost[i/3]}`)
+                    http1.onload = function(){
+                        let res = http1.responseText;
+                        var likeBt = document.querySelector('.countLike_'+listIdPost[i/3]);
+                        let s = likeBt.innerText;
+                        s = parseInt(s);
+                        if(res==1){
+                            s+=1;
+                        }
+                        else{
+                            s-=1;
+                        }
+                        likeBt.innerText = s;
+                        if(listData[i/3].checkLike==1){
+                            bt[i].style = "background: buttonface;";
+                        }
+                        else{
+                            bt[i].style = "background: aqua;";
+                        }
+                    }
+                    http1.send();
+                    // alert(`Api/likeapi?idUser=${idUser}&idPost=${listIdPost[i/3]}`);
+                })
+            }
         }
     }
     http.onprogress = function(event){

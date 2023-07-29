@@ -45,11 +45,12 @@ class ApiController{
         foreach($listIdPost as $idPost){
             $listPost[] = $postModel->getPostById($idPost);
         }
-        $listPostHtml = [];
+        $listDataPost = [];
         date_default_timezone_set("Asia/Ho_Chi_Minh");
         $currentTime = new DateTime('now');
         
         foreach($listPost as $post){
+            //time
             $targetTime = new DateTime($post['create_time']);
             $time = $currentTime->diff($targetTime);
             $listTime = [$time->days.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
@@ -64,7 +65,7 @@ class ApiController{
                     break;
                 }
             }
-
+            //media
             $listIdMedia = $postModel->getListIdMediaByIdPost($post['id']);
             $listMedia = [];
             foreach($listIdMedia as $id){
@@ -79,42 +80,42 @@ class ApiController{
                     $media .= '<img class="media"src="'.$m['src'].'"><br>';
                 }
             }
-
+            //like
             $countLike = $postModel->getCountLikeByIdPost($post['id']);
+            $checkLike = $postModel->checkLike(base64_decode($_SESSION['id']),$post['id']);
+            //comment
             $countComment = $postModel->getCountCommentByIdPost($post['id']);
+            //share
+            $countShare = $postModel->getCountShareByIdPost($post['id']);
 
-            $listPostHtml[] = 
-            '
-            <div class="post">
-                <div class="user_of_post">
-                    <div class="small_avatar">
-                        <a href=""><img src="'.$srcAvatarPhoto.'" alt=""></a>
-                    </div>
-                    <div class="name_and_date">
-                    <span style="font-size: 15px; font-weight: bold;">'.$name.'</span><br>
-                    <span>'.$passed.'</span>
-                    </div>
-                </div>
-                <div class="post_content">
-                    <div class="text">
-                        <p>'.$post['text'].'
-                    </div>
-                    <div class="list_media">
-                        '.$media.'
-                    </div>
-                </div>
-                <div class="info_of_post">
-                    <span class="like">'.$countLike.' like</span>
-                    <span class="comment">'.$countComment.' binh luan</span>
-                    <span class="share"><?=$share?>chia se</span>
-                </div>
-                <div class="action_with_post">
-                    <button>like</button><button>binh luan</button><button>chia se</button>
-                </div>
-            </div>
-            ';
+            $dataPost = [
+                'idPost'=>$post['id'],
+                'srcAvatarPhoto'=>$srcAvatarPhoto,
+                'userName'=>$name,
+                'passed'=>$passed,
+                'text'=>$post['text'],
+                'media'=>$media,
+                'countLike'=>$countLike,
+                'checkLike'=>$checkLike,
+                'countComment'=>$countComment,
+                'countShare'=>$countShare
+            ];
+            $listDataPost[] = $dataPost;
         }
-        echo json_encode($listPostHtml);
+        echo json_encode($listDataPost);
+        // print_r($listDataPost);
+    }
+    public function LikeAPI(){
+        $postModel = new PostModel();
+        $idPost = $_GET['idPost'];
+        $idUser = $_GET['idUser'];
+        $res = $postModel->actionLikePost($idUser, $idPost);
+        if($res==1){
+            echo '1';
+        }
+        elseif($res==0){
+            echo '0';
+        }
     }
 }
 $apiController = new ApiController();
@@ -124,6 +125,9 @@ switch($action){
         break;
     case "postapi":
         $apiController->PostAPI();
+        break;
+    case "likeapi":
+        $apiController->LikeAPI();
         break;
     default:
         break;

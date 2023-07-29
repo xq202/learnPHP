@@ -10,6 +10,7 @@
         var id = <?=$id?>;
         var index = 0;
         var url = '<?=$url?>';
+        var idUser = "<?=base64_decode($_SESSION['id'])?>";
     </script>
 </head>
 <body>
@@ -46,8 +47,9 @@
             <?php
             include $page;
             ?>
+            <script src="./View/js/post.js"></script>
         </div>
     </div>
+    <script src="./View/js/profile.js"></script>
 </body>
-<script src="./View/js/profile.js"></script>
 </html>

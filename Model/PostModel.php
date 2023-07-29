@@ -10,6 +10,7 @@ class PostModel{
     {
         $this->conn = new ConnDAO();
     }
+    //post
     public function getPostById($id){
         $conn = $this->conn->connect();
         $stmt = $conn->stmt_init();
@@ -40,6 +41,7 @@ class PostModel{
             echo $stmt->error;
         }
     }
+    //media
     public function getListIdMediaByIdPost($idPost){
         $conn = $this->conn->connect();
         $stmt = $conn->stmt_init();
@@ -78,10 +80,11 @@ class PostModel{
             echo $stmt->error;
         }
     }
+    //like
     public function getCountLikeByIdPost($id){
         $conn = $this->conn->connect();
         $stmt = $conn->stmt_init();
-        $stmt->prepare("select count(*) as s from likes where id = ?");
+        $stmt->prepare("select count(*) as s from likes where id_post = ?");
         $stmt->bind_param("s",$id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -92,10 +95,72 @@ class PostModel{
             echo $stmt->error;
         }
     }
+    public function actionLikePost($id_user, $id_post){
+        $conn = $this->conn->connect();
+        $stmt = $conn->stmt_init();
+        $stmt->prepare("select * from likes where id_user_like = ? and id_post = ?");
+        $stmt->bind_param("ss",$id_user, $id_post);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result){
+            if($row = $result->fetch_assoc()){
+                $stmt->prepare("delete from likes where id = ?");
+                $stmt->bind_param("s",$row['id']);
+                $stmt->execute();
+                return 0;
+            }
+            else{
+                $stmt->prepare("insert into likes (id_user_like, id_post) values (?, ?)");
+                $stmt->bind_param("ss",$id_user,$id_post);
+                $stmt->execute();
+                return 1;
+            }
+        }
+        else{
+            echo $stmt->error;
+            return -1;
+        }
+    }
+    public function checkLike($idUser, $idPost){
+        $conn = $this->conn->connect();
+        $stmt = $conn->stmt_init();
+        $stmt->prepare("select * from likes where id_user_like = ? and id_post = ?");
+        $stmt->bind_param("ss",$idUser, $idPost);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result){
+            $c = $result->fetch_assoc();
+            if($c){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
+        else{
+            echo $stmt->error;
+        }
+    }
+    //comment
     public function getCountCommentByIdPost($id){
         $conn = $this->conn->connect();
         $stmt = $conn->stmt_init();
-        $stmt->prepare("select count(*) as s from comments where id = ?");
+        $stmt->prepare("select count(*) as s from comment_of_post where id_post = ?");
+        $stmt->bind_param("s",$id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result){
+            return $result->fetch_assoc()['s'];
+        }
+        else{
+            echo $stmt->error;
+        }
+    }
+    //share
+    public function getCountShareByIdPost($id){
+        $conn = $this->conn->connect();
+        $stmt = $conn->stmt_init();
+        $stmt->prepare("select count(*) as s from share where id_post = ?");
         $stmt->bind_param("s",$id);
         $stmt->execute();
         $result = $stmt->get_result();
