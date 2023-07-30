@@ -51,8 +51,8 @@ class ApiController{
         
         foreach($listPost as $post){
             //time
-            $passed = new TimePassed($post['create_time']);
-            // print_r($passed.'<br>');
+            $time = new TimePassed();
+            $passed = $time->timePost($post['create_time']);
             //media
             $listIdMedia = $postModel->getListIdMediaByIdPost($post['id']);
             $listMedia = [];
@@ -105,8 +105,47 @@ class ApiController{
             echo '0';
         }
     }
-    public function CommentPAI(){
-        
+    public function CommentAPI(){
+        $postModel = new PostModel();
+        $userModel = new UserModel();
+        $idPost = $_GET['idPost'];
+        $index = $_GET['index'];
+        $listIdComment = $postModel->getListIdCommentByIdPost($idPost, $index);
+        $data = [];
+        foreach($listIdComment as $idComment){
+            $comment = $postModel->getCommentById($idComment);
+            $id = $comment['id'];
+            $text = $comment['text'];
+            $idUser = $comment['id_user'];
+            $user = $userModel->getUserById($idUser);
+            $srcAvatar = $user->getAnhDaiDien();
+            $userName = $user->getTen();
+            $listReply = $postModel->getListReplyOfCommentByIdComment($id);
+            $replyComments = [];
+            $listData = [];
+            foreach($listReply as $reply){
+                $idReply = $reply['id_reply_comment'];
+                $commentReply = $postModel->getCommentById($idReply);
+                $textReply = $commentReply['text'];
+                $idUserReply = $commentReply['id_user'];
+                $replyToIdUser = $reply['reply_to_id_user'];
+                $replyComments[] = [
+                    'id'=>$idReply,
+                    'text'=>$textReply,
+                    'idUser'=>$idUserReply,
+                    'replyToIdUser'=>$replyToIdUser
+                ];
+            }
+            $data = [
+                'id'=>$id,
+                'text'=>$text,
+                'idUser'=>$idUser,
+                'listReply'=>$replyComments
+            ];
+            $listData[] = $data;
+        }
+        // print_r($listData);
+        // echo json_encode($listData);
     }
 }
 $apiController = new ApiController();
@@ -119,6 +158,9 @@ switch($action){
         break;
     case "likeapi":
         $apiController->LikeAPI();
+        break;
+    case "commentapi":
+        $apiController->CommentAPI();
         break;
     default:
         break;

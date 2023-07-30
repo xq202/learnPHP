@@ -2,21 +2,12 @@
 namespace Model;
 use DateTime;
 class TimePassed{
-    private $targetTime = null;
-    public function __construct($targetTime)
-    {
-        $this->targetTime = $targetTime;
-    }
-    public function __toString()
-    {
-        return $this->timePassed($this->targetTime);
-    }
-    public function timePassed($targetTime){
+    public function timePost($targetTime){
         date_default_timezone_set("Asia/Ho_Chi_Minh");
         $currentTime = new DateTime('now');
         $targetTime = new DateTime($targetTime);
         $time = $currentTime->diff($targetTime);
-        $listTime = [$time->days.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
+        $listTime = [$time->d.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
         $passed = null;
         if($time->days>7){
             $passed = $targetTime->format('d').' thang '.$targetTime->format('m').', '.$targetTime->format('Y');
@@ -29,5 +20,8 @@ class TimePassed{
             }
         }
         return $passed;
+    }
+    public function timeComment(){
+
     }
 }

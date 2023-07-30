@@ -33,3 +33,19 @@ for(let i=0;i<bt.length;i++){
         })
     }
 }
+var listComment = document.querySelector('listComment');
+function loadComment(){
+    var http = new XMLHttpRequest();
+    http.open("GET",`/learnPHP/api/CommentAPI?idPost=${idPost}&index=${index}`,true);
+    http.onload = function(){
+        var listData = JSON.parse(http.responseText);
+        listData.array.forEach(element => {
+            var listReply = element.listReply;
+            listComment.innerHTML += `
+            <div class="small_avatar">
+                <a href=""><img src="" alt=""></a>
+            </div>
+            `
+        });
+    }
+}
