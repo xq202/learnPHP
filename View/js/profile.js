@@ -15,7 +15,7 @@ function loadpost(){
                 let liked = '';
                 // alert(dataPost.checkLike);
                 if(dataPost.checkLike==1){
-                    liked = 'style="background-color: aqua"';
+                    liked = 'aqua';
                 }
                 listPost.innerHTML += 
                 `<div class="post">
@@ -42,7 +42,7 @@ function loadpost(){
                         <span class="share">${dataPost.countShare} chia se</span>
                     </div>
                     <div class="action_with_post">
-                        <button class="action_bt" ${liked}>like</button><button class="action_bt">binh luan</button><button class="action_bt">chia se</button>
+                        <button class="action_bt" style="background-color: ${liked}">like</button><button class="action_bt">binh luan</button><button class="action_bt">chia se</button>
                     </div>
                 </div>
                 `;
@@ -58,6 +58,7 @@ function loadpost(){
                     return;
                 }
             }
+            //button like
             if(i%3==0){
                 bt[i].addEventListener('click',function(){
                     // alert('click');
@@ -70,17 +71,13 @@ function loadpost(){
                         s = parseInt(s);
                         if(res==1){
                             s+=1;
+                            bt[i].style = "background-color: aqua;";
                         }
                         else{
                             s-=1;
+                            bt[i].style = "background-color: buttonface;";
                         }
                         likeBt.innerText = s;
-                        if(listData[i/3].checkLike==1){
-                            bt[i].style = "background: buttonface;";
-                        }
-                        else{
-                            bt[i].style = "background: aqua;";
-                        }
                     }
                     http1.send();
                     // alert(`Api/likeapi?idUser=${idUser}&idPost=${listIdPost[i/3]}`);

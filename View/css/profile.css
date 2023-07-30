@@ -1,8 +1,13 @@
 div{
     /* border: 1px solid black; */
 }
-body{
-
+.body{
+    /* opacity: 0.4; */
+    /* overflow: hidden; */
+    /* background-color: black; */
+}
+.full{
+    opacity: 0.4;
 }
 .phan1{
     box-sizing: border-box;

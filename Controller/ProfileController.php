@@ -10,11 +10,19 @@ class ProfileController{
         // require "./Model/UserModel.php";
         $userModel = new UserModel();
         $id = null;
+        if(!isset($_SESSION['id'])){
+            $_SESSION['id'] = null;
+        }
         if(!isset($_GET["id"])){
             $id = base64_decode($_SESSION["id"]);
         }
         else{
             $id = $_GET["id"];
+        }
+        if($id==null){
+            echo "<script> alert('vui long dang nhap');</script>";
+            header("location: /learnPHP/Login");
+            exit();
         }
         $url = $_SERVER["REQUEST_URI"];
         // echo $url;
@@ -23,9 +31,6 @@ class ProfileController{
         if($name==null) $name = "noname";
         $srcCoverPhoto = $user->getAnhBia();
         $srcAvatarPhoto = $user->getAnhDaiDien();
-        if(!isset($_SESSION['id'])){
-            $_SESSION['id'] = null;
-        }
         require "./View/profile.php";
     }
 }

@@ -13,7 +13,8 @@
         var idUser = "<?=base64_decode($_SESSION['id'])?>";
     </script>
 </head>
-<body>
+<body class="body1">
+    <div class="full">
     <div class="background1">
         <div class="phan1">
             <div class="anh-bia"><a href=""><img src="<?=$srcCoverPhoto?>" alt="anh bia"></a></div>
@@ -50,6 +51,8 @@
             <script src="./View/js/post.js"></script>
         </div>
     </div>
+    </div>
     <script src="./View/js/profile.js"></script>
 </body>
+<iframe class="commentFrame" src="Comment?idUser=1&idPost=2" frameborder="0" width="700px" height="550px" style="position: fixed;top: 60px; left: 400px; overflow: hidden;"></iframe>
 </html>

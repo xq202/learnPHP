@@ -8,6 +8,8 @@ use DateTime;
 use Model\LoginModel;
 use Model\UserModel;
 use Model\PostModel;
+use Model\TimePassed;
+
 class ApiController{
     public function RegisterAPI(){
         $register = new LoginModel();
@@ -46,25 +48,11 @@ class ApiController{
             $listPost[] = $postModel->getPostById($idPost);
         }
         $listDataPost = [];
-        date_default_timezone_set("Asia/Ho_Chi_Minh");
-        $currentTime = new DateTime('now');
         
         foreach($listPost as $post){
             //time
-            $targetTime = new DateTime($post['create_time']);
-            $time = $currentTime->diff($targetTime);
-            $listTime = [$time->days.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
-            $passed = null;
-            if($time->days>7){
-                $passed = $targetTime->format('d').' thang '.$targetTime->format('m').', '.$targetTime->format('Y');
-            }
-            else
-            foreach($listTime as $t){
-                if($t[0]!=0){
-                    $passed = $t;
-                    break;
-                }
-            }
+            $passed = new TimePassed($post['create_time']);
+            // print_r($passed.'<br>');
             //media
             $listIdMedia = $postModel->getListIdMediaByIdPost($post['id']);
             $listMedia = [];
@@ -92,7 +80,7 @@ class ApiController{
                 'idPost'=>$post['id'],
                 'srcAvatarPhoto'=>$srcAvatarPhoto,
                 'userName'=>$name,
-                'passed'=>$passed,
+                'passed'=>(string)$passed,
                 'text'=>$post['text'],
                 'media'=>$media,
                 'countLike'=>$countLike,
@@ -116,6 +104,9 @@ class ApiController{
         elseif($res==0){
             echo '0';
         }
+    }
+    public function CommentPAI(){
+        
     }
 }
 $apiController = new ApiController();
