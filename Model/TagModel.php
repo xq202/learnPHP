@@ -27,4 +27,17 @@ class TagModel{
             echo $stmt->error;
         }
     }
+    public function addTagByTypeAndIdType($type, $idType, $idUser){
+        $stmt = $this->conn->stmt_init();
+        $stmt->prepare("insert into tag (type, id_type, id_user) values (?, ?, ?)");
+        $stmt->bind_param("sss",$type,$idType,$idUser);
+        $stmt->execute();
+        $result = $stmt->affected_rows;
+        if($result>0){
+            return 1;
+        }
+        else{
+            echo $stmt->error;
+        }
+    }
 }

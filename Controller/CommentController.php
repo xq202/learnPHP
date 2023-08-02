@@ -1,5 +1,6 @@
 <?php
 
+use Model\CommentModel;
 use Model\PostModel;
 use Model\TimePassed;
 use Model\UserModel;
@@ -7,6 +8,7 @@ use Model\UserModel;
 class CommentController{
     public function CommentView(){
         $postModel = new PostModel();
+        $commentModel = new CommentModel();
         $idPost = $_GET['idPost'];
         $idUser = $_GET['idUser'];
         //user
@@ -52,7 +54,7 @@ class CommentController{
         $countLike = $postModel->getCountLikeByIdPost($post['id']);
         $checkLike = $postModel->checkLike(base64_decode($_SESSION['id']),$post['id']);
         //comment
-        $countComment = $postModel->getCountCommentByIdPost($post['id']);
+        $countComment = $commentModel->getCountCommentByIdPost($post['id']);
         //share
         $countShare = $postModel->getCountShareByIdPost($post['id']);
         if($checkLike==1){

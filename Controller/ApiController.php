@@ -5,6 +5,7 @@ namespace Controller;
 // require "./Model/UserModel.php";
 
 use DateTime;
+use Model\CommentModel;
 use Model\LoginModel;
 use Model\UserModel;
 use Model\PostModel;
@@ -43,6 +44,7 @@ class ApiController{
         $srcAvatarPhoto = $user->getAnhDaiDien();
         //post
         $postModel = new PostModel();
+        $commentModel = new CommentModel();
         $listIdPost = $postModel->getListIdPostByIdAcc($id, $index);
         $listPost = array();
         foreach($listIdPost as $idPost){
@@ -73,7 +75,7 @@ class ApiController{
             $countLike = $postModel->getCountLikeByIdPost($post['id']);
             $checkLike = $postModel->checkLike(base64_decode($_SESSION['id']),$post['id']);
             //comment
-            $countComment = $postModel->getCountCommentByIdPost($post['id']);
+            $countComment = $commentModel->getCountCommentByIdPost($post['id']);
             //share
             $countShare = $postModel->getCountShareByIdPost($post['id']);
 
@@ -107,17 +109,17 @@ class ApiController{
         }
     }
     public function CommentAPI(){
-        $postModel = new PostModel();
         $userModel = new UserModel();
+        $commentModel = new CommentModel();
         $tag = new TagModel();
         $time = new TimePassed();
         $idPost = $_GET['idPost'];
         $index = $_GET['index'];
-        $listIdComment = $postModel->getListIdCommentByIdPost($idPost, $index);
+        $listIdComment = $commentModel->getListIdCommentByIdPost($idPost, $index);
         $data = [];
         $listData = [];
         foreach($listIdComment as $idComment){
-            $comment = $postModel->getCommentById($idComment);
+            $comment = $commentModel->getCommentById($idComment);
             $id = $comment['id'];
             $text = $comment['text'];
             $idUser = $comment['id_user'];
@@ -125,7 +127,7 @@ class ApiController{
             $user = $userModel->getUserById($idUser);
             $srcAvatar = $user->getAnhDaiDien();
             $userName = $user->getTen();
-            $listReply = $postModel->getListReplyOfCommentByIdComment($id);
+            $listReply = $commentModel->getListReplyOfCommentByIdComment($id);
             $replyComments = [];
             //tag
             $listTag = $tag->getListIdUserTagByTypeAndId('comment',$id);
@@ -136,7 +138,7 @@ class ApiController{
             }
             foreach($listReply as $reply){
                 $idReply = $reply['id_reply_comment'];
-                $commentReply = $postModel->getCommentById($idReply);
+                $commentReply = $commentModel->getCommentById($idReply);
                 $textReply = $commentReply['text'];
                 $idUserReply = $commentReply['id_user'];
                 $timeReply = $time->timeComment($commentReply['create_time']);
@@ -173,6 +175,31 @@ class ApiController{
         // print_r($listData);
         echo json_encode($listData);
     }
+    public function addCommentAPI(){
+        $commentModel = new CommentModel();
+        $tagModel = new TagModel();
+        $userModel = new UserModel();
+        $time = new TimePassed();
+        $text = $_POST['text'];
+        $idUser = $_POST['idUser'];
+        $idComment = $_POST['idComment'];
+        $newId = $commentModel->addCommentAndGetNewId($text,$idUser);
+        $comment = $commentModel->getCommentById($idComment);
+        $tagId = $comment['id_user'];
+        $commentModel->addReplyOfComment($commentModel->searchIdCommentByIdReplyComment($idComment),$newId);
+        if($tagId != $idUser && $tagId!=null){
+            $tagModel->addTagByTypeAndIdType('comment',$newId,$tagId);
+        }
+        $listData = [];
+        $newComment = $commentModel->getCommentById($newId);
+        $user = $userModel->getUserById($idUser);
+        $listData['userName'] = $user->getTen();
+        $listData['srcAvatar'] = $user->getAnhDaiDien();
+        $listData['text'] = $newComment['text'];
+        $listData['passed'] = 'vai giay';
+        $listData['id'] = $newComment['id'];
+        echo json_encode($listData);
+    }
 }
 $apiController = new ApiController();
 switch($action){
@@ -187,6 +214,9 @@ switch($action){
         break;
     case "commentapi":
         $apiController->CommentAPI();
+        break;
+    case "addcommentapi":
+        $apiController->addCommentAPI();
         break;
     default:
         break;

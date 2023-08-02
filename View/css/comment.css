@@ -67,6 +67,9 @@ button:hover{
     overflow: hidden;
     margin: 0;
 }
+.content .formComment {
+    display: none;
+}
 .inputText{
     margin-left: 10px;
     background-color: rgb(212, 230, 236);
@@ -111,7 +114,7 @@ button:hover{
     display: flex;
     flex-direction: column;
 }
-.contentComment{
+.commentContent{
     background-color: rgb(215, 239, 240);
     border-radius: 20px;
     padding-left: 15px;
@@ -120,10 +123,10 @@ button:hover{
     margin-left: 5px;
     width: calc(100% - 30px);
 }
-.contentComment h3{
+.commentContent h3{
     margin-top: 5px;
 }
-.contentComment a{
+.commentContent a{
     text-decoration: none;
 }
 .listReply{

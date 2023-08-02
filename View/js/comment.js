@@ -47,11 +47,22 @@ function settingBt(idPost){
         http3.send();
     }
 }
+function setBt(listUserComment){
+    for(let id in listUserComment){
+        document.querySelector('.replyCommentBt_'+id).onclick = function(){
+            document.querySelector('.comment .inputText').placeholder = 'tra loi '+listUserComment[id];
+            formComment.style.display = 'flex';
+            document.querySelector('.comment .inputText').focus();
+            idComment = id;
+        }
+    }
+}
 function loadComment(idPost){
     var listComment = document.querySelector('.listComment');
     var http2 = new XMLHttpRequest();
     http2.open("GET",`api/CommentAPI?idPost=${idPost}&index=0`,true);
     http2.onload = function(){
+        var listUserComment = [];
         var listData = JSON.parse(http2.responseText);
         listData.forEach(element => {
             var listReply = element.listReply;
@@ -67,7 +78,7 @@ function loadComment(idPost){
                     <div class="small_avatar">
                         <a href=""><img src="${reply.srcAvatar}" alt=""></a>
                     </div>
-                    <div class="contentComment">
+                    <div class="commentContent">
                         <h3>${reply.userName}</h3>
                         <p>${listTag2} ${reply.text}</p>
                         <span class="time">${reply.passed}</span>
@@ -78,6 +89,7 @@ function loadComment(idPost){
                     </div>
                 </div>
                 `
+                listUserComment[reply.id] = reply.userName;
             });
             listComment.innerHTML += `
             <div class="comment">
@@ -85,7 +97,7 @@ function loadComment(idPost){
                     <a href=""><img src="${element.srcAvatar}" alt=""></a>
                 </div>
                 <div class="right_avatar">
-                    <div class="contentComment">
+                    <div class="commentContent">
                         <h3>${element.userName}</h3>
                         <p>${element.text}</span></p>
                         <span class="time">${element.passed}</span>
@@ -94,19 +106,73 @@ function loadComment(idPost){
                             <button class="replyCommentBt_${element.id}">tra loi</button>
                         </div>
                     </div>
-                    <div class="listReply">
-                        ${listReplyHtml}
+                    <div class="replyContent">
+                        <div class="listReply">
+                            ${listReplyHtml}
+                        </div>
                         <form action="" class="formComment" style="position: relative; margin-top: 6px">
                             <div class="small_avatar">
                                 <a href=""><img src="${element.srcAvatar}" alt=""></a>
                             </div>
-                            <input type="text" class="inputText" placeholder="Tra loi ${element.userName}">
+                            <input type="text" class="inputText" placeholder="">
                             <input type="submit" value=">" class="submit">
                         </form>
                     </div>
                 </div>
             </div>
-            `
+            `;
+            listUserComment[element.id] = element.userName;
+        });
+        var idComment = null;
+        let formComment = document.querySelector('.content .formComment');
+        for(let id in listUserComment){
+            document.querySelector('.replyCommentBt_'+id).onclick = function(){
+                document.querySelector('.comment .inputText').placeholder = 'tra loi '+listUserComment[id];
+                formComment.style.display = 'flex';
+                document.querySelector('.comment .inputText').focus();
+                idComment = id;
+            }
+        }
+        formComment.addEventListener('submit', function(event){
+            event.preventDefault();
+            let text = document.querySelector('.content .inputText').value;
+            if(text.trim()=='') return;
+            formComment.style.display = 'none';
+            let sendComment = new XMLHttpRequest();
+            let data = new FormData();
+            data.append('text',text);
+            data.append('idUser',idUser);
+            data.append('idComment',idComment);
+            sendComment.open("POST",`api/addcommentapi`,true);
+            sendComment.onload = function(){
+                let listData = JSON.parse(sendComment.responseText);
+                let listReply = document.querySelector('.listReply');
+                listReply.innerHTML += `
+                <div class="comment">
+                    <div class="small_avatar">
+                        <a href=""><img src="${listData['srcAvatar']}" alt=""></a>
+                    </div>
+                    <div class="commentContent">
+                        <h3>${listData['userName']}</h3>
+                        <p>${listUserComment[listData['id']]} ${listData['text']}</p>
+                        <span class="time">${listData['passed']}</span>
+                        <div class="actionComment">
+                            <button class="likeCommentBt_${listData['id']}">thich</button>
+                            <button class="replyCommentBt_${listData['id']}">tra loi</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+                listUserComment[listData['id']] = listData['userName']
+                document.querySelector('.replyCommentBt_'+listData['id']).onclick = function(){
+                    document.querySelector('.comment .inputText').placeholder = 'tra loi '+listUserComment[listData['id']];
+                    formComment.style.display = 'flex';
+                    document.querySelector('.comment .inputText').focus();
+                    idComment = listData['id'];
+                }
+            }
+            idComment = null;
+            sendComment.send(data);
         });
         settingBt(idPost);
     }
