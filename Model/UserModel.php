@@ -5,6 +5,7 @@ use DAO\ConnDAO;
 class User{
     public function __construct($ten, $gioiTinh, $ngaySinh, $queQuan, $noiOHienTai, $soThich, $gioiThieu, $anhDaiDien, $anhBia)
     {
+        if($ten==null) $ten = "noname";
         $this->ten = $ten;
         $this->gioiTinh = $gioiTinh;
         $this->ngaySinh = $ngaySinh;
@@ -60,6 +61,7 @@ class User{
         return $this->anhBia;
     }
     public function setTen($ten){
+        if($ten==null) $ten = "noname";
         $this->ten = $ten;
     }
     public function setGioiTinh($gioiTinh){

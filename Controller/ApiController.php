@@ -8,6 +8,7 @@ use DateTime;
 use Model\LoginModel;
 use Model\UserModel;
 use Model\PostModel;
+use Model\TagModel;
 use Model\TimePassed;
 
 class ApiController{
@@ -108,44 +109,69 @@ class ApiController{
     public function CommentAPI(){
         $postModel = new PostModel();
         $userModel = new UserModel();
+        $tag = new TagModel();
+        $time = new TimePassed();
         $idPost = $_GET['idPost'];
         $index = $_GET['index'];
         $listIdComment = $postModel->getListIdCommentByIdPost($idPost, $index);
         $data = [];
+        $listData = [];
         foreach($listIdComment as $idComment){
             $comment = $postModel->getCommentById($idComment);
             $id = $comment['id'];
             $text = $comment['text'];
             $idUser = $comment['id_user'];
+            $timeComment = $time->timeComment($comment['create_time']);
             $user = $userModel->getUserById($idUser);
             $srcAvatar = $user->getAnhDaiDien();
             $userName = $user->getTen();
             $listReply = $postModel->getListReplyOfCommentByIdComment($id);
             $replyComments = [];
-            $listData = [];
+            //tag
+            $listTag = $tag->getListIdUserTagByTypeAndId('comment',$id);
+            $listUserNameTag = [];
+            foreach($listTag as $t){
+                $u = $userModel->getUserById($t);
+                $listUserNameTag[$t] = $u->getTen();
+            }
             foreach($listReply as $reply){
                 $idReply = $reply['id_reply_comment'];
                 $commentReply = $postModel->getCommentById($idReply);
                 $textReply = $commentReply['text'];
                 $idUserReply = $commentReply['id_user'];
-                $replyToIdUser = $reply['reply_to_id_user'];
+                $timeReply = $time->timeComment($commentReply['create_time']);
+                
+                $userReply = $userModel->getUserById($idUserReply);
+
+                $listTag = $tag->getListIdUserTagByTypeAndId('comment',$idReply);
+                // print_r($listTag);
+                $listUserNameTag1 = [];
+                foreach($listTag as $t){
+                    $u = $userModel->getUserById($t);
+                    $listUserNameTag1[$t] = $u->getTen();
+                }
                 $replyComments[] = [
                     'id'=>$idReply,
                     'text'=>$textReply,
-                    'idUser'=>$idUserReply,
-                    'replyToIdUser'=>$replyToIdUser
+                    'srcAvatar'=>$userReply->getAnhDaiDien(),
+                    'userName'=>$userReply->getTen(),
+                    'listUserNameTag'=>$listUserNameTag1,
+                    'passed'=>$timeReply
                 ];
             }
             $data = [
                 'id'=>$id,
                 'text'=>$text,
-                'idUser'=>$idUser,
-                'listReply'=>$replyComments
+                'srcAvatar'=>$srcAvatar,
+                'userName'=>$userName,
+                'listReply'=>$replyComments,
+                'listUserNameTag'=>$listUserNameTag,
+                'passed'=>$timeComment
             ];
             $listData[] = $data;
         }
         // print_r($listData);
-        // echo json_encode($listData);
+        echo json_encode($listData);
     }
 }
 $apiController = new ApiController();

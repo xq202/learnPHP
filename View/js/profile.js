@@ -1,7 +1,24 @@
 var listPost = document.querySelector(".listPost");
+var checkLoad = true;
+function openCommentFrame(idPost){
+    document.querySelector('.commentFrame').style.display = "block";
+    document.querySelector('.backgroundFrame').style.display = 'block';
+    document.querySelector('body').style.overflow = "hidden";
+    var http1 = new XMLHttpRequest();
+    http1.open("GET", `Comment?idUser=${idUser}&idPost=${idPost}`);
+    http1.onload = function(){
+        document.querySelector('.commentFrame').innerHTML = http1.responseText;
+        loadComment(idPost);
+    }
+    http1.send();
+}
+function closeCommentFrame(){
+    document.querySelector('.commentFrame').style.display = "none";
+    document.querySelector('.backgroundFrame').style.display = 'none';
+    document.querySelector('body').style.overflow = "scroll";
+}
+//post
 var http = new XMLHttpRequest();
-checkLoad = true;
-var checkScroll = false;
 function loadpost(){
     x = 0;
     http.open("GET",`Api/PostAPI?id=${id}&index=${index}`,true);
@@ -10,7 +27,7 @@ function loadpost(){
             // alert(idUser);
             var listData = JSON.parse(http.responseText);
             x = listData.length;
-            var listIdPost = []
+            var listIdPost = [];
             listData.forEach(dataPost =>{
                 let liked = '';
                 // alert(dataPost.checkLike);
@@ -38,51 +55,50 @@ function loadpost(){
                     </div>
                     <div class="info_of_post">
                         <span><span class="countLike_${dataPost.idPost}">${dataPost.countLike}</span> like</span>
-                        <span class="comment">${dataPost.countComment} binh luan</span>
-                        <span class="share">${dataPost.countShare} chia se</span>
+                        <span class="countComment_${dataPost.idPost}">${dataPost.countComment} binh luan</span>
+                        <span class="countShare_${dataPost.idPost}">${dataPost.countShare} chia se</span>
                     </div>
                     <div class="action_with_post">
-                        <button class="action_bt" style="background-color: ${liked}">like</button><button class="action_bt">binh luan</button><button class="action_bt">chia se</button>
+                        <button class="like_${dataPost.idPost}" style="background-color: ${liked}">like</button><button class="comment_${dataPost.idPost}">binh luan</button><button class="share_${dataPost.idPost}">chia se</button>
                     </div>
                 </div>
                 `;
-            listIdPost.push(dataPost.idPost);
-            })
-        }
-        var bt = document.querySelectorAll(".action_bt");
-        for(let i=0;i<bt.length;i++){
-            bt[i].onclick = function(){
-                if(idUser==""){
-                    alert('vui long dang nhap');
-                    window.location.href = '/learnPHP/Login';
-                    return;
-                }
-            }
-            //button like
-            if(i%3==0){
-                bt[i].addEventListener('click',function(){
-                    // alert('click');
+                listIdPost.push(dataPost.idPost);
+            });
+            listIdPost.forEach(i => {
+                let btLike = document.querySelector('.like_'+i);
+                btLike.onclick = function(){
+                    if(idUser==""){
+                        alert('vui long dang nhap');
+                        window.location.href = '/learnPHP/Login';
+                        return;
+                    }
+                    //button like
                     var http1 = new XMLHttpRequest();
-                    http1.open('GET',`Api/likeapi?idUser=${idUser}&idPost=${listIdPost[i/3]}`)
+                    http1.open('GET',`Api/likeapi?idUser=${idUser}&idPost=${i}`)
+                    // alert(listIdPost[parseInt(i/3)]);
                     http1.onload = function(){
                         let res = http1.responseText;
-                        var likeBt = document.querySelector('.countLike_'+listIdPost[i/3]);
-                        let s = likeBt.innerText;
+                        let countLike = document.querySelector('.countLike_'+i);
+                        let s = countLike.innerText;
                         s = parseInt(s);
                         if(res==1){
                             s+=1;
-                            bt[i].style = "background-color: aqua;";
+                            btLike.style = "background-color: aqua;";
                         }
                         else{
                             s-=1;
-                            bt[i].style = "background-color: buttonface;";
+                            btLike.style = "background-color: buttonface;";
                         }
-                        likeBt.innerText = s;
+                        countLike.innerText = s;
                     }
                     http1.send();
-                    // alert(`Api/likeapi?idUser=${idUser}&idPost=${listIdPost[i/3]}`);
-                })
-            }
+                }
+                var btComment = document.querySelector('.comment_'+i);
+                btComment.onclick = ()=>{
+                    openCommentFrame(i);
+                }
+            });
         }
     }
     http.onprogress = function(event){
@@ -102,7 +118,10 @@ function loadpost(){
         }
     }
     http.send();
-    if(x<20) checkLoad = false;
+    if(x<20){
+        checkLoad = false;
+        // alert('end');
+    }
     else{
         index+=x;
     }
@@ -111,20 +130,28 @@ function loadpost(){
         this.document.querySelector(".new_post").display = "block";
     }
 }
-loadpost();
-// alert('hello');
+var backgroundFrame = document.querySelector('.backgroundFrame');
+backgroundFrame.addEventListener('click', function(){
+    closeCommentFrame();
+});
 window.addEventListener("scroll", function(){
     if(checkLoad && window.innerHeight + window.scrollY >= document.body.scrollHeight){
         loadpost();
     }
 });
-var splitUrl = url.split("/");
+loadpost();
+
+//cac lua chon
+idx = url.indexOf('?');
+var valueGet = '';
+if(idx){
+    valueGet = url.substring(idx);
+}
 var luaChon = document.querySelectorAll(".lua_chon");
 var listLuaChon = ['bai-viet','gioi-thieu','ban-be','anh','video'];
-// alert('/learnPHP/'+listLuaChon[0]+'/'+splitUrl[splitUrl.length-1]);
 for(let i=0;i<5;i++){
     luaChon[i].addEventListener('click', function(){
-        window.location.replace('/learnPHP/profile/'+listLuaChon[i]+'/'+splitUrl[splitUrl.length-1]);
+        window.location.replace('/learnPHP/profile/' + listLuaChon[i] + '/' + valueGet);
         localStorage.setItem('click','2');
     })
 }

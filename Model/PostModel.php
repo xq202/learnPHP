@@ -137,17 +137,13 @@ class PostModel{
     }
     //comment
     public function getCountCommentByIdPost($id){
-        $stmt = $this->conn->stmt_init();
-        $stmt->prepare("select count(*) as s from comment_of_post where id_post = ?");
-        $stmt->bind_param("s",$id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if($result){
-            return $result->fetch_assoc()['s'];
+        $res = 0;
+        $listIdComment = $this->getListIdCommentByIdPost($id,-1);
+        foreach($listIdComment as $idComment){
+            $res+=1;
+            $res+=count($this->getListReplyOfCommentByIdComment($idComment));
         }
-        else{
-            echo $stmt->error;
-        }
+        return $res;
     }
     public function getCommentById($id){
         $stmt = $this->conn->stmt_init();
@@ -164,8 +160,13 @@ class PostModel{
     }
     public function getListIdCommentByIdPost($idPost, $index){
         $stmt = $this->conn->stmt_init();
-        $stmt->prepare("select * from comment_of_post where id_post = ? order by id desc limit ?, 50");
-        $stmt->bind_param("ss",$idPost, $index);
+        if($index>=0) $sql = " limit ?, 50";
+        else{
+            $sql = '';
+        }
+        $stmt->prepare("select * from comment_of_post where id_post = ? order by id desc{$sql}");
+        if($index>=0) $stmt->bind_param("ss",$idPost, $index);
+        else $stmt->bind_param("s",$idPost);
         $stmt->execute();
         $result = $stmt->get_result();
         $listIdComment = [];

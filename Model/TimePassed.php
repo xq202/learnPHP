@@ -14,14 +14,28 @@ class TimePassed{
         }
         else
         foreach($listTime as $t){
-            if($t[0]!=0){
+            $s = explode(' ',$t);
+            if(intval($s[0])!=0){
                 $passed = $t;
                 break;
             }
         }
         return $passed;
     }
-    public function timeComment(){
-
+    public function timeComment($targetTime){
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
+        $currentTime = new DateTime('now');
+        $targetTime = new DateTime($targetTime);
+        $time = $currentTime->diff($targetTime);
+        $listTime = [$time->y.' nam',$time->m.' thang',$time->d.' ngay',$time->h.' gio',$time->i.' phut',$time->s.' giay'];
+        $passed = null;
+        foreach($listTime as $t){
+            $s = explode(' ',$t);
+            if(intval($s[0])!=0){
+                $passed = $t;
+                break;
+            }
+        }
+        return $passed;
     }
 }

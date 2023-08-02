@@ -11,4 +11,6 @@
 <div class="new_post">
     <p>bai viet moi hon</p>
 </div>
-<div class="listPost"></div>
+<div class="listPost">
+    
+</div>

@@ -10,6 +10,9 @@ class ProfileController{
         // require "./Model/UserModel.php";
         $userModel = new UserModel();
         $id = null;
+        //
+        $_SESSION['id'] = base64_encode('1');
+        //
         if(!isset($_SESSION['id'])){
             $_SESSION['id'] = null;
         }
@@ -28,7 +31,6 @@ class ProfileController{
         // echo $url;
         $user = $userModel->getUserById($id);
         $name = $user->getTen();
-        if($name==null) $name = "noname";
         $srcCoverPhoto = $user->getAnhBia();
         $srcAvatarPhoto = $user->getAnhDaiDien();
         require "./View/profile.php";
