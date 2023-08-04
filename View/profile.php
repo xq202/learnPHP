@@ -11,6 +11,7 @@
         var index = 0;
         var url = '<?=$url?>';
         var idUser = "<?=base64_decode($_SESSION['id'])?>";
+        var srcAvatar = '<?=$srcAvatarView?>';
     </script>
 </head>
 <body class="body1">

@@ -118,10 +118,46 @@ class CommentModel{
         $stmt->execute();
         $result = $stmt->get_result();
         if($result){
-            return $result->fetch_assoc()['id_comment'];
+            $row = $result->fetch_assoc();
+            if($row){
+                return $row['id_comment'];
+            }
+            else{
+                return $idReplyComment;
+            }
         }
         else{
             echo 'searchIdCommentByIdReplyComment '.$stmt->error;
         }
+    }
+    //full
+    public function getFullInfoCommentById($idComment){
+        $userModel = new UserModel();
+        $tag = new TagModel();
+        $time = new TimePassed();
+        $comment = $this->getCommentById($idComment);
+        $id = $comment['id'];
+        $text = $comment['text'];
+        $idUser = $comment['id_user'];
+        $timeComment = $time->timeComment($comment['create_time']);
+        $user = $userModel->getUserById($idUser);
+        $srcAvatar = $user->getAnhDaiDien();
+        $userName = $user->getTen();
+        //tag
+        $listTag = $tag->getListIdUserTagByTypeAndId('comment',$id);
+        $listUserNameTag = [];
+        foreach($listTag as $t){
+            $u = $userModel->getUserById($t);
+            $listUserNameTag[$t] = $u->getTen();
+        }
+        $data = [
+            'id'=>$id,
+            'text'=>$text,
+            'srcAvatar'=>$srcAvatar,
+            'userName'=>$userName,
+            'listUserNameTag'=>$listUserNameTag,
+            'passed'=>$timeComment
+        ];
+        return $data;
     }
 }

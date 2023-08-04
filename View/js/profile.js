@@ -5,10 +5,11 @@ function openCommentFrame(idPost){
     document.querySelector('.backgroundFrame').style.display = 'block';
     document.querySelector('body').style.overflow = "hidden";
     var http1 = new XMLHttpRequest();
-    http1.open("GET", `Comment?idUser=${idUser}&idPost=${idPost}`);
+    http1.open("GET", `Comment?idPost=${idPost}`);
     http1.onload = function(){
         document.querySelector('.commentFrame').innerHTML = http1.responseText;
         loadComment(idPost);
+        setActionForm(idPost);
     }
     http1.send();
 }
@@ -96,6 +97,11 @@ function loadpost(){
                 }
                 var btComment = document.querySelector('.comment_'+i);
                 btComment.onclick = ()=>{
+                    if(idUser==""){
+                        alert('vui long dang nhap');
+                        window.location.href = '/learnPHP/Login';
+                        return;
+                    }
                     openCommentFrame(i);
                 }
             });

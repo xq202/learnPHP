@@ -22,6 +22,25 @@ class PostModel{
             return $result->fetch_assoc();
         }
     }
+    public function getIdUserByIdPost($idPost){
+        $stmt = $this->conn->stmt_init();
+        $stmt->prepare("select id_user from post_of_user where id_post = ?");
+        $stmt->bind_param("s",$idPost);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result){
+            $row = $result->fetch_assoc();
+            if($row){
+                return $row['id_user'];
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            echo $stmt->error;
+        }
+    }
     public function getListIdPostByIdAcc($id, $index){
         $sql = "select * from post_of_user where id_user = ? order by id desc limit ?, 20";
         $stmt = $this->conn->stmt_init();

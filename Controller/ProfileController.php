@@ -11,10 +11,16 @@ class ProfileController{
         $userModel = new UserModel();
         $id = null;
         //
-        $_SESSION['id'] = base64_encode('1');
+        // $_SESSION['id'] = base64_encode('1');
         //
+        $userView = null;
+        $srcAvatarView = null;
         if(!isset($_SESSION['id'])){
             $_SESSION['id'] = null;
+        }
+        else{
+            $userView = $userModel->getUserById(base64_decode($_SESSION['id']));
+            $srcAvatarView = $userView->getAnhDaiDien();
         }
         if(!isset($_GET["id"])){
             $id = base64_decode($_SESSION["id"]);

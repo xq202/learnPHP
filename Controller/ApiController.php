@@ -109,80 +109,33 @@ class ApiController{
         }
     }
     public function CommentAPI(){
-        $userModel = new UserModel();
         $commentModel = new CommentModel();
-        $tag = new TagModel();
-        $time = new TimePassed();
         $idPost = $_GET['idPost'];
         $index = $_GET['index'];
         $listIdComment = $commentModel->getListIdCommentByIdPost($idPost, $index);
         $data = [];
         $listData = [];
         foreach($listIdComment as $idComment){
-            $comment = $commentModel->getCommentById($idComment);
-            $id = $comment['id'];
-            $text = $comment['text'];
-            $idUser = $comment['id_user'];
-            $timeComment = $time->timeComment($comment['create_time']);
-            $user = $userModel->getUserById($idUser);
-            $srcAvatar = $user->getAnhDaiDien();
-            $userName = $user->getTen();
+            $data = $commentModel->getFullInfoCommentById($idComment);
+            $id = $data['id'];
             $listReply = $commentModel->getListReplyOfCommentByIdComment($id);
             $replyComments = [];
-            //tag
-            $listTag = $tag->getListIdUserTagByTypeAndId('comment',$id);
-            $listUserNameTag = [];
-            foreach($listTag as $t){
-                $u = $userModel->getUserById($t);
-                $listUserNameTag[$t] = $u->getTen();
-            }
             foreach($listReply as $reply){
                 $idReply = $reply['id_reply_comment'];
-                $commentReply = $commentModel->getCommentById($idReply);
-                $textReply = $commentReply['text'];
-                $idUserReply = $commentReply['id_user'];
-                $timeReply = $time->timeComment($commentReply['create_time']);
-                
-                $userReply = $userModel->getUserById($idUserReply);
-
-                $listTag = $tag->getListIdUserTagByTypeAndId('comment',$idReply);
-                // print_r($listTag);
-                $listUserNameTag1 = [];
-                foreach($listTag as $t){
-                    $u = $userModel->getUserById($t);
-                    $listUserNameTag1[$t] = $u->getTen();
-                }
-                $replyComments[] = [
-                    'id'=>$idReply,
-                    'text'=>$textReply,
-                    'srcAvatar'=>$userReply->getAnhDaiDien(),
-                    'userName'=>$userReply->getTen(),
-                    'listUserNameTag'=>$listUserNameTag1,
-                    'passed'=>$timeReply
-                ];
+                $replyComments[] = $commentModel->getFullInfoCommentById($idReply);
             }
-            $data = [
-                'id'=>$id,
-                'text'=>$text,
-                'srcAvatar'=>$srcAvatar,
-                'userName'=>$userName,
-                'listReply'=>$replyComments,
-                'listUserNameTag'=>$listUserNameTag,
-                'passed'=>$timeComment
-            ];
+            $data['listReply'] = $replyComments;
             $listData[] = $data;
         }
         // print_r($listData);
         echo json_encode($listData);
     }
-    public function addCommentAPI(){
+    public function addReplyCommentAPI(){
         $commentModel = new CommentModel();
         $tagModel = new TagModel();
-        $userModel = new UserModel();
-        $time = new TimePassed();
         $text = $_POST['text'];
         $idUser = $_POST['idUser'];
-        $idComment = $_POST['idComment'];
+        $idComment = $_POST['idCommentRep'];
         $newId = $commentModel->addCommentAndGetNewId($text,$idUser);
         $comment = $commentModel->getCommentById($idComment);
         $tagId = $comment['id_user'];
@@ -190,15 +143,19 @@ class ApiController{
         if($tagId != $idUser && $tagId!=null){
             $tagModel->addTagByTypeAndIdType('comment',$newId,$tagId);
         }
-        $listData = [];
-        $newComment = $commentModel->getCommentById($newId);
-        $user = $userModel->getUserById($idUser);
-        $listData['userName'] = $user->getTen();
-        $listData['srcAvatar'] = $user->getAnhDaiDien();
-        $listData['text'] = $newComment['text'];
-        $listData['passed'] = 'vai giay';
-        $listData['id'] = $newComment['id'];
+        sleep(1);
+        $listData = $commentModel->getFullInfoCommentById($newId);
         echo json_encode($listData);
+    }
+    public function addCommentAPI(){
+        $idPost = $_POST['idPost'];
+        $text = $_POST['text'];
+        $idUser = $_POST['idUser'];
+        $commentModel = new CommentModel();
+        $newId = $commentModel->addCommentAndGetNewId($text,$idUser);
+        $commentModel->addCommentOfPost($newId,$idPost);
+        sleep(1);
+        echo $idPost.' '.$text.' '.$idUser;
     }
 }
 $apiController = new ApiController();
@@ -215,9 +172,11 @@ switch($action){
     case "commentapi":
         $apiController->CommentAPI();
         break;
+    case "addreplycommentapi":
+        $apiController->addReplyCommentAPI();
+        break;
     case "addcommentapi":
         $apiController->addCommentAPI();
-        break;
     default:
         break;
 }

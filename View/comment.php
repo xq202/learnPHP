@@ -1,9 +1,5 @@
 <link rel="stylesheet" href="./View/css/post.css">
 <link rel="stylesheet" href="./View/css/comment.css">
-<script>
-    var idUser = <?=$idUser?>;
-    var checkLike = <?=$checkLike?>;
-</script>
 <div class="backgroundComment" style="height: 100%;">
 <div class="content">
     <button class="closeBt" onclick="closeCommentFrame()">X</button>
@@ -27,8 +23,8 @@
         </div>
         <div class="info_of_post">
             <span><span class="countLike_<?=$idPost?>"><?=$countLike?></span> like</span>
-            <span class="countComment"><?=$countComment?> binh luan</span>
-            <span class="countShare"><?=$countShare?> chia se</span>
+            <span class="countComment_<?=$idPost?>"><?=$countComment?> binh luan</span>
+            <span class="countShare_<?=$idPost?>"><?=$countShare?> chia se</span>
         </div>
         <div class="action_with_post">
             <button class="like_<?=$idPost?>" style="background-color: <?=$liked?>;">like</button><button class="comment_<?=$idPost?>">binh luan</button><button class="share_<?=$idPost?>">chia se</button>
@@ -38,11 +34,11 @@
         
     </div>
 </div>
-    <form action="" class="formComment">
+    <form class="formComment">
         <div class="small_avatar">
             <a href=""><img src="<?=$srcAvatarPhotoView?>" alt=""></a>
         </div>
-        <input type="text" class="inputText" placeholder="Viet binh luan">
+        <input type="text" class="inputText" id="inputText" placeholder="Viet binh luan" autocomplete="off">
         <input type="submit" value=">" class="submit">
     </form>
 </div>

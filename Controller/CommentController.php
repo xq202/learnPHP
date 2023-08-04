@@ -10,7 +10,7 @@ class CommentController{
         $postModel = new PostModel();
         $commentModel = new CommentModel();
         $idPost = $_GET['idPost'];
-        $idUser = $_GET['idUser'];
+        $idUser = $postModel->getIdUserByIdPost($idPost);
         //user
         $userModel = new UserModel();
         $user = $userModel->getUserById($idUser);
@@ -19,7 +19,6 @@ class CommentController{
         $idUserView = null;
         if(!isset($_SESSION['id'])){
             echo '<script> alert("ban can dang nhap");</script>';
-            header('location: /learnPHP/Login');
             exit();
         }
         else{
