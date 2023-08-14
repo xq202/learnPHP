@@ -57,3 +57,4 @@
 <div class="commentFrame"></div>
 <script src="./View/js/comment.js"></script>
 <script src="./View/js/profile.js"></script>
+<script src="./View/js/post.js"></script>

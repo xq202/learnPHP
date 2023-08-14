@@ -1,7 +1,7 @@
 <?php
 session_start();
 $urls = array();
-if(!isset($_GET["url"])){
+if(!isset($_GET["url"]) || $_GET['url']=='index.php'){
     require "./Controller/HomeController.php";
     exit();
 }

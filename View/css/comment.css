@@ -8,8 +8,10 @@ body{
 }
 .commentFrame{
     position: fixed;
-    top: 60px;
-    left: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    justify-content: center;
     overflow: hidden;
     overflow-y: scroll;
     border-radius: 10px;

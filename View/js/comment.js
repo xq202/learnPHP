@@ -3,21 +3,27 @@ function closeCommentFrame(){
     document.querySelector('.backgroundFrame').style.display = 'none';
     document.querySelector('.body1').style.overflow = "scroll";
 }
-function openCommentFrame(){
+function openCommentFrame(idPost){
     document.querySelector('.commentFrame').style.display = "block";
     document.querySelector('.backgroundFrame').style.display = 'block';
-    document.querySelector('.body1').style.overflow = "hidden";
+    document.querySelector('body').style.overflow = "hidden";
     var http1 = new XMLHttpRequest();
-    http1.open("GET", `Comment?idUser=${idUser}&idPost=${idPost}`);
+    http1.open("GET", `Comment?idPost=${idPost}`);
     http1.onload = function(){
         document.querySelector('.commentFrame').innerHTML = http1.responseText;
         loadComment(idPost);
+        setActionForm(idPost);
     }
     http1.send();
 }
 function ok(){
     alert('ok');
 }
+
+var backgroundFrame = document.querySelector('.backgroundFrame');
+backgroundFrame.addEventListener('click', function(){
+    closeCommentFrame();
+});
 
 // cai dat cac hanh dong khi nhan like
 function settingBt(idPost){

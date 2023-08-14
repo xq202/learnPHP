@@ -1,23 +1,5 @@
 var listPost = document.querySelector(".listPost");
 var checkLoad = true;
-function openCommentFrame(idPost){
-    document.querySelector('.commentFrame').style.display = "block";
-    document.querySelector('.backgroundFrame').style.display = 'block';
-    document.querySelector('body').style.overflow = "hidden";
-    var http1 = new XMLHttpRequest();
-    http1.open("GET", `Comment?idPost=${idPost}`);
-    http1.onload = function(){
-        document.querySelector('.commentFrame').innerHTML = http1.responseText;
-        loadComment(idPost);
-        setActionForm(idPost);
-    }
-    http1.send();
-}
-function closeCommentFrame(){
-    document.querySelector('.commentFrame').style.display = "none";
-    document.querySelector('.backgroundFrame').style.display = 'none';
-    document.querySelector('body').style.overflow = "scroll";
-}
 //post
 var http = new XMLHttpRequest();
 function loadpost(){
@@ -136,10 +118,6 @@ function loadpost(){
         this.document.querySelector(".new_post").display = "block";
     }
 }
-var backgroundFrame = document.querySelector('.backgroundFrame');
-backgroundFrame.addEventListener('click', function(){
-    closeCommentFrame();
-});
 window.addEventListener("scroll", function(){
     if(checkLoad && window.innerHeight + window.scrollY >= document.body.scrollHeight){
         loadpost();

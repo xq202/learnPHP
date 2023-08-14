@@ -22,3 +22,17 @@
 <div class="listPost">
     
 </div>
+<div class="backgroundAddPost"></div>
+<div class="addPostContent">
+    <div class="addPostTitle">Tao bai viet</div>
+    <div class="addPostBody">
+        <form class="addPostForm">
+            <input type="text" placeholder="ban dang nghi gi" class="inputTextAddPost">
+            <input type="file"  id="addFile" style="display: none;">
+            <label for="addFile" class="addFile">anh, video</label>
+            <video src="" alt="" class="view" width="50%" height="50%" controls></video>
+            <input type="submit" value="dang" id="addPostBt">
+            <label for="addPostBt" class="addPostBt"></label>
+        </form>
+    </div>
+</div>
